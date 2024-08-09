@@ -48,6 +48,23 @@ def parse_tasks(html):
 
     return task_data
 
+def sort_tasks(user_id, tasks):
+    file_path = f'users_link/{user_id}.txt'
+    with open(file_path, 'r') as f:
+        existing_strings = f.readlines()
+        existing_strings = [s.strip() for s in existing_strings]
+
+    texts = []
+    for task in tasks:
+        nl = task['link']
+        if nl not in existing_strings:
+            with open(file_path, 'a') as f:
+                f.write(nl + "\n")
+            text = f"Название: {task['title']}\nОтклики: {task['responses']}\nПросмотры: {task['views']}\nВремя размещения: {task['time_posted']}\nЦена: {task['price']}\nСсылка: {task['link']}"
+            texts.append(text)
+
+    return texts
+
 def main():
     df = pd.read_csv(CSV_FILE)
     # print(df['habr_url'])
@@ -79,19 +96,16 @@ def main():
                 tasks = parse_tasks(content)
                 if not tasks:
                     return
-
-                file_path = f'users_link/{i}.txt'
-                with open(file_path, 'r') as f:
-                    existing_strings = f.readlines()
-                    existing_strings = [s.strip() for s in existing_strings]
-
-                for task in tasks:
-                    nl = task['link']
-                    if nl not in existing_strings:
-                        with open(file_path, 'a') as f:
-                            f.write(nl + "\n")
-                        text = f"Название: {task['title']}\nОтклики: {task['responses']}\nПросмотры: {task['views']}\nВремя размещения: {task['time_posted']}\nЦена: {task['price']}\nСсылка: {task['link']}"
-                        send_message_only_text(int(user_id), text)            
+                tasks.reverse()
+                if len(tasks) >= 5:
+                    texts = sort_tasks(int(user_id), tasks)
+                    for i in texts:  
+                        send_message_only_text(int(user_id), i)
+                        time.sleep(1)
+                else:
+                    texts = sort_tasks(int(user_id))
+                    for i in texts:  
+                        send_message_only_text(int(user_id), i)         
         else:
             pass
 
