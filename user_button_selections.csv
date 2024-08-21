@@ -1,0 +1,2 @@
+user_id,notifications,Разработка,Тестирование,Администрирование,Дизайн,Контент,Маркетинг,Разное,От имеющих отзывы,С указанной стоимостью,С безопасной сделкой,Только срочные заказы,habr_url
+1286015414,True,False,True,False,False,False,False,True,False,True,True,True,"https://freelance.habr.com/tasks?&only_with_price=true&safe_deal=true&only_urgent=true&categories=testing_sites,testing_mobile,testing_software,other_audit_analytics,other_consulting,other_jurisprudence,other_accounting,other_audio,other_video,other_engineering,other_other"
